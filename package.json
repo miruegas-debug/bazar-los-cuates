@@ -1,14 +1,13 @@
 {
   "name": "bazar-los-cuates",
   "version": "1.0.0",
-  "private": true,
-  "description": "Bazar Los Cuates - Jesús María, Aguascalientes",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "check": "node --check server.js && node --check app.js && node --check script.js && node --check product.js && node --check offer.js && node --check admin.js"
+    "start": "node server.js"
   },
-  "engines": {
-    "node": ">=22"
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "mongoose": "^7.6.3"
   }
 }
