@@ -195,6 +195,29 @@ const BC = (() => {
     if (document.fonts?.ready) document.fonts.ready.then(updateHeight);
   }
 
+  function initBusinessPopup() {
+    const popup = document.getElementById("popup-negocio");
+    if (!popup) return;
+
+    const close = () => {
+      popup.hidden = true;
+    };
+
+    popup.addEventListener("click", (event) => {
+      if (event.target === popup || event.target.closest("[data-popup-close]")) {
+        close();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !popup.hidden) close();
+    });
+
+    window.setTimeout(() => {
+      popup.hidden = false;
+    }, 2000);
+  }
+
   function initFloatingContact() {
     const page = window.location.pathname.split("/").pop() || "index.html";
     if (page === "admin.html" || document.querySelector("#floating-contact")) return;
@@ -706,6 +729,7 @@ const BC = (() => {
 
   document.addEventListener("DOMContentLoaded", () => {
     initSiteAlert();
+    initBusinessPopup();
     initHeader();
     initDialogs();
     initFloatingContact();

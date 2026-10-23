@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261023-1">
 </head>
 <body>
   <a class="skip-link" href="#catalogo">Ir directo al catálogo</a>
@@ -268,7 +268,18 @@
     </div>
   </footer>
 
-  <script src="app.js" defer></script>
-  <script src="script.js" defer></script>
+
+  <div class="business-popup" id="popup-negocio" role="dialog" aria-modal="true" aria-labelledby="popup-negocio-title" hidden>
+    <div class="business-popup-card">
+      <span class="business-popup-kicker">Bazar Los Cuates</span>
+      <h2 id="popup-negocio-title">¿Quieres una aplicación para tu negocio?</h2>
+      <p>En Bazar Los Cuates te la hacemos a tu medida. Contáctame y te cotizo sin compromiso.</p>
+      <a class="btn btn-wa business-popup-cta" href="https://wa.me/524491883244?text=Hola%20Manuel!%20Vi%20tu%20pagina%20del%20Bazar%20y%20quiero%20cotizar%20una%20app%20para%20mi%20negocio" target="_blank" rel="noopener">Contactar por WhatsApp</a>
+      <button class="business-popup-close" type="button" data-popup-close>Cerrar</button>
+    </div>
+  </div>
+
+  <script src="app.js?v=20261023-1" defer></script>
+  <script src="script.js?v=20261023-1" defer></script>
 </body>
 </html>

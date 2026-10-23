@@ -1656,10 +1656,8 @@ function serveStatic(req, res, pathname, context) {
   res.statusCode = 200;
   res.setHeader("Content-Type", contentType);
   res.setHeader("Content-Length", stat.size);
-  res.setHeader(
-    "Cache-Control",
-    extension === ".html" ? "no-cache" : "public, max-age=3600",
-  );
+  const revalidate = [".html", ".js", ".css"].includes(extension);
+  res.setHeader("Cache-Control", revalidate ? "no-cache" : "public, max-age=3600");
 
   if (req.method === "HEAD") {
     res.end();

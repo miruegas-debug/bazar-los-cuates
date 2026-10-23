@@ -4157,3 +4157,82 @@ body.modal-open {
   background: #a32121;
   border-color: #a32121;
 }
+
+.business-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.84);
+  backdrop-filter: blur(6px);
+}
+
+.business-popup[hidden] {
+  display: none;
+}
+
+.business-popup-card {
+  width: min(100%, 380px);
+  padding: 30px 26px 24px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 210, 31, 0.14), transparent 17rem),
+    var(--black-soft);
+  border: 2px solid var(--yellow);
+  border-radius: 24px;
+  box-shadow: 0 0 50px rgba(255, 210, 31, 0.2);
+}
+
+.business-popup-kicker {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--yellow);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.business-popup-card h2 {
+  margin: 0 0 12px;
+  color: var(--yellow);
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 6vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.business-popup-card p {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.business-popup-cta {
+  width: 100%;
+  justify-content: center;
+}
+
+.business-popup-close {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 20px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.business-popup-close:hover {
+  color: var(--cream);
+  border-color: var(--muted);
+}
