@@ -9,30 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let editImageDataUrl = "";
   let editingProduct = null;
   let aiBusy = false;
-  const heroInput = document.querySelector("#admin-hero-file");
-  const heroPreview = document.querySelector("#admin-hero-preview");
-
-  function renderHeroImage(url) {
-    if (url) heroPreview.src = url;
-  }
-
-  heroInput.addEventListener("change", async () => {
-    const file = heroInput.files[0];
-    if (!file) return;
-    try {
-      const imageDataUrl = await BC.compressImage(file, 1800);
-      const result = await BC.api("/api/admin/hero", {
-        method: "POST",
-        body: { imageDataUrl },
-      });
-      heroPreview.src = `${result.url}?v=${Date.now()}`;
-      BC.toast("Foto de portada actualizada. Ya se ve en la tienda.");
-    } catch (error) {
-      BC.toast(error.message, "error");
-    } finally {
-      heroInput.value = "";
-    }
-  });
 
   async function init() {
     try {
@@ -138,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ]);
       adminProducts = products.products;
       renderSummary(summary.summary);
-      renderHeroImage(summary.summary.heroImageUrl);
       renderProducts(products.products.filter((product) => product.status !== "sold"));
       renderSold(products.products.filter((product) => product.status === "sold"));
     } catch (error) {
@@ -156,8 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
       summaryCard("Pausados", summary.pausedProducts, "Fuera de la tienda"),
       summaryCard("Vendidos", summary.soldProducts, "Guardados en historial"),
       summaryCard("Total", summary.totalProducts, "Publicaciones creadas"),
-      summaryCard("Personas hoy", summary.visitsToday ?? 0, "Visitantes únicos"),
-      summaryCard("Personas total", summary.visitsTotal ?? 0, "Visitantes únicos"),
     ].join("");
   }
 
@@ -281,12 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const deleteAllButton = event.target.closest("[data-admin-delete-all]");
-    if (deleteAllButton) {
-      removeAllProducts(deleteAllButton);
-      return;
-    }
-
     const shareButton = event.target.closest("[data-admin-share]");
     if (shareButton) {
       const product = adminProducts.find((item) => item.publicId === shareButton.dataset.adminShare);
@@ -324,22 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       await BC.api(`/api/admin/products/${button.dataset.adminDelete}`, { method: "DELETE" });
       BC.toast("Publicación eliminada.");
-      await loadDashboard();
-    } catch (error) {
-      BC.toast(error.message, "error");
-      button.disabled = false;
-    }
-  }
-
-  async function removeAllProducts(button) {
-    if (!window.confirm("Esto borrará TODOS los productos y sus fotos. ¿Continuar?")) return;
-    const confirmation = window.prompt('Escribe BORRAR para confirmar');
-    if (confirmation !== "BORRAR") return;
-    button.disabled = true;
-    try {
-      const result = await BC.api("/api/admin/products", { method: "DELETE" });
-      BC.toast(`Catálogo borrado: ${result.deletedProducts} productos y ${result.deletedImages} fotos.`);
-      switchTab("products");
       await loadDashboard();
     } catch (error) {
       BC.toast(error.message, "error");
