@@ -1,1 +1,16 @@
-[{"id":"1","texto":"Anúnciate aquí","negocio":"Tu negocio aquí $100 al mes","whatsapp":"4491883244","activo":true},{"id":"2","texto":"Carpintería Los Cuates","negocio":"Muebles rústicos","whatsapp":"4491883244","activo":true}]
+[
+  {
+    "id": "1",
+    "titulo": "Anúnciate aquí - Tu negocio aquí $100 al mes",
+    "link": "https://wa.me/524491883244",
+    "imagen": "",
+    "activo": true
+  },
+  {
+    "id": "2",
+    "titulo": "Carpintería Los Cuates - Muebles rústicos",
+    "link": "https://wa.me/524491883244",
+    "imagen": "",
+    "activo": true
+  }
+]
