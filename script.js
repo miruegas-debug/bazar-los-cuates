@@ -71,6 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const visitsTotal = document.querySelector("#contador-visitas-total");
     if (visitsToday) visitsToday.textContent = meta.visitsToday ?? 0;
     if (visitsTotal) visitsTotal.textContent = meta.visitsTotal ?? 0;
+
+    const heroImage = document.querySelector("#blc-hero-img");
+    if (heroImage && meta.heroImageUrl) heroImage.src = meta.heroImageUrl;
   }
 
   function updateCategoryButtons() {

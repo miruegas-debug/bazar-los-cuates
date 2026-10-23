@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261023-3">
+  <link rel="stylesheet" href="styles.css?v=20261023-5">
 </head>
 <body>
   <header class="site-header" id="site-header">
@@ -85,6 +85,16 @@
                 <button class="btn btn-primary" type="button" data-admin-goto-publish>Publicar producto</button>
                 <button class="btn btn-outline admin-delete-all-button" type="button" data-admin-delete-all>Borrar todo</button>
               </div>
+            </div>
+            <div class="hero-editor-card">
+              <div class="hero-editor-copy">
+                <p class="eyebrow">Portada</p>
+                <h2>Foto de herramientas</h2>
+                <p class="hero-editor-text">Esta es la imagen grande que recibe a los visitantes. Cámbiala cuando quieras; se actualiza para todos.</p>
+                <label class="btn btn-outline hero-editor-button" for="admin-hero-file">Cambiar foto de portada</label>
+                <input id="admin-hero-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+              </div>
+              <img id="admin-hero-preview" src="/assets/hero-taller.jpg" alt="Vista previa de la foto de portada">
             </div>
             <div id="admin-products"></div>
           </section>
@@ -236,7 +246,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261023-3" defer></script>
-  <script src="admin.js?v=20261023-3" defer></script>
+  <script src="app.js?v=20261023-5" defer></script>
+  <script src="admin.js?v=20261023-5" defer></script>
 </body>
 </html>

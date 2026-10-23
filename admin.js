@@ -9,6 +9,30 @@ document.addEventListener("DOMContentLoaded", () => {
   let editImageDataUrl = "";
   let editingProduct = null;
   let aiBusy = false;
+  const heroInput = document.querySelector("#admin-hero-file");
+  const heroPreview = document.querySelector("#admin-hero-preview");
+
+  function renderHeroImage(url) {
+    if (url) heroPreview.src = url;
+  }
+
+  heroInput.addEventListener("change", async () => {
+    const file = heroInput.files[0];
+    if (!file) return;
+    try {
+      const imageDataUrl = await BC.compressImage(file, 1800);
+      const result = await BC.api("/api/admin/hero", {
+        method: "POST",
+        body: { imageDataUrl },
+      });
+      heroPreview.src = `${result.url}?v=${Date.now()}`;
+      BC.toast("Foto de portada actualizada. Ya se ve en la tienda.");
+    } catch (error) {
+      BC.toast(error.message, "error");
+    } finally {
+      heroInput.value = "";
+    }
+  });
 
   async function init() {
     try {
@@ -114,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]);
       adminProducts = products.products;
       renderSummary(summary.summary);
+      renderHeroImage(summary.summary.heroImageUrl);
       renderProducts(products.products.filter((product) => product.status !== "sold"));
       renderSold(products.products.filter((product) => product.status === "sold"));
     } catch (error) {

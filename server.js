@@ -42,6 +42,7 @@ const VISITOR_DAYS = 365;
 const PUBLIC_VISIT_PAGES = new Set(["/", "/index.html", "/producto.html"]);
 const MAX_JSON_BYTES = 8 * 1024 * 1024;
 const ROOT = __dirname;
+const DEFAULT_HERO_IMAGE_URL = "/assets/hero-taller.jpg";
 const DEEPSEEK_API_KEY = String(process.env.DEEPSEEK_API_KEY || "").trim();
 const DEEPSEEK_MODEL = String(process.env.DEEPSEEK_MODEL || "deepseek-flash").trim();
 const DEEPSEEK_VISION_MODEL = String(process.env.DEEPSEEK_VISION_MODEL || "").trim();
@@ -539,9 +540,23 @@ function acceptOffer(db, offer, actor) {
   }
 }
 
-function saveUploadedImage(dataUrl, uploadsDir) {
+function getAppMeta(db, key, fallback = "") {
+  const row = db.prepare("SELECT value FROM app_meta WHERE key = ?").get(key);
+  return row ? String(row.value) : fallback;
+}
+
+function setAppMeta(db, key, value) {
+  db.prepare("INSERT OR REPLACE INTO app_meta (key, value) VALUES (?, ?)").run(key, value);
+}
+
+function getHeroImageUrl(db) {
+  const value = getAppMeta(db, "hero_image_url", "");
+  return value.startsWith("/uploads/") || value.startsWith("/assets/") ? value : DEFAULT_HERO_IMAGE_URL;
+}
+
+function saveUploadedImage(dataUrl, uploadsDir, prefix = "product") {
   if (!dataUrl || typeof dataUrl !== "string") {
-    throw new HttpError(400, "Selecciona una foto para el producto.");
+    throw new HttpError(400, "Selecciona una foto.");
   }
 
   const match = dataUrl.match(/^data:image\/(jpeg|jpg|png|webp);base64,([A-Za-z0-9+/=\s]+)$/i);
@@ -570,7 +585,7 @@ function saveUploadedImage(dataUrl, uploadsDir) {
   }
 
   const extension = mime === "jpeg" || mime === "jpg" ? "jpg" : mime;
-  const filename = `product_${Date.now()}_${crypto.randomBytes(5).toString("hex")}.${extension}`;
+  const filename = `${prefix}_${Date.now()}_${crypto.randomBytes(5).toString("hex")}.${extension}`;
   fs.writeFileSync(path.join(uploadsDir, filename), buffer, { mode: 0o644 });
   return `/uploads/${filename}`;
 }
@@ -723,6 +738,7 @@ async function handleApi(req, res, requestUrl, context) {
       todayProductCount,
       visitsToday,
       visitsTotal,
+      heroImageUrl: getHeroImageUrl(db),
       aiEnabled: Boolean(DEEPSEEK_API_KEY),
     });
     return;
@@ -1218,6 +1234,7 @@ async function handleApi(req, res, requestUrl, context) {
         soldProducts: countByStatus("sold"),
         visitsToday,
         visitsTotal,
+        heroImageUrl: getHeroImageUrl(db),
       },
     });
     return;
@@ -1242,6 +1259,17 @@ async function handleApi(req, res, requestUrl, context) {
     return;
   }
 
+  if (pathname === "/api/admin/hero" && method === "POST") {
+    requireUser(req, db, "admin");
+    const body = await readJson(req);
+    const previousUrl = getHeroImageUrl(db);
+    const imageUrl = saveUploadedImage(body.imageDataUrl, uploadsDir, "hero");
+    setAppMeta(db, "hero_image_url", imageUrl);
+    if (previousUrl !== imageUrl) removeUploadedImage(uploadsDir, previousUrl);
+    sendJson(res, 200, { ok: true, url: imageUrl });
+    return;
+  }
+
   if ((pathname === "/api/admin/products" || pathname === "/api/productos/todos") && method === "DELETE") {
     requireUser(req, db, "admin");
     const totalProducts = Number(db.prepare("SELECT COUNT(*) AS total FROM products").get().total);
@@ -1257,9 +1285,11 @@ async function handleApi(req, res, requestUrl, context) {
       throw error;
     }
 
+    const heroImageUrl = getHeroImageUrl(db);
+    const protectedHeroFile = heroImageUrl.startsWith("/uploads/") ? path.basename(heroImageUrl) : "";
     let deletedImages = 0;
     for (const entry of fs.readdirSync(uploadsDir, { withFileTypes: true })) {
-      if (!entry.isFile()) continue;
+      if (!entry.isFile() || entry.name === protectedHeroFile) continue;
       fs.rmSync(path.join(uploadsDir, entry.name), { force: true });
       deletedImages += 1;
     }
