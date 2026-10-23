@@ -22,32 +22,29 @@
 <body>
 
 <!-- BANNER ANUNCIATE AQUI - INICIO -->
-<div id="banner-anuncios" style="position:sticky;top:0;z-index:9999;background:black;color:white;text-align:center;padding:10px;font-weight:bold;cursor:pointer;display:none;">
-  <span style="background:#facc15;color:black;padding:2px 6px;border-radius:4px;font-size:11px">ANUNCIO</span>
-  <span id="banner-texto">Anúnciate aquí</span>
+<style>
+#banner-principal{position:sticky;top:0;z-index:9999;background:#000;color:#fff;text-align:center;padding:12px;font-family:Arial;font-weight:bold;cursor:pointer;border-bottom:3px solid #facc15}
+#banner-principal b{background:#facc15;color:#000;padding:2px 6px;border-radius:4px;font-size:11px;margin-right:8px}
+</style>
+<div id="banner-principal" onclick="window.open('https://wa.me/524491883244?text=Hola quiero anunciarme en Bazar Los Cuates','_blank')">
+  <b>ANUNCIO</b><span id="txt-banner">✨ Anúnciate aquí - Tu negocio aquí $100 al mes ✨</span>
 </div>
 <script>
-(async function(){
-  try{
-    const r = await fetch('/api/banners');
-    let banners = await r.json();
-    banners = banners.filter(b=>b.activo);
-    if(banners.length==0) return;
-    document.getElementById('banner-anuncios').style.display='block';
-    let idx=0;
-    const txt=document.getElementById('banner-texto');
-    const ban=document.getElementById('banner-anuncios');
-    function mostrar(){
-      const b=banners[idx];
-      txt.textContent='✨ '+b.titulo+' ✨';
-      ban.onclick=function(){ if(b.link) window.open(b.link,'_blank'); };
-    }
-    mostrar();
-    setInterval(function(){ idx=(idx+1)%banners.length; mostrar(); },3000);
-  }catch(e){ console.log('no banners',e); }
-})();
+const banners=[
+  "✨ Anúnciate aquí - Tu negocio aquí $100 al mes ✨",
+  "✨ Carpintería Los Cuates - Muebles rústicos en Jesús María ✨",
+  "✨ ¿Vendes algo? Anúnciate por $100 al mes aquí ✨"
+];
+let i=0;
+setInterval(()=>{
+  i=(i+1)%banners.length;
+  document.getElementById('txt-banner').textContent=banners[i];
+},3000);
 </script>
 <!-- BANNER ANUNCIATE AQUI - FIN -->
+
+
+
 
 
 
