@@ -19,7 +19,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=20261023-5">
 </head>
-<body>\n<!-- BANNER -->
+<body>
+
+<!-- BANNER ANUNCIATE AQUI - INICIO -->
+<div id="banner-anuncios" style="position:sticky;top:0;z-index:9999;background:black;color:white;text-align:center;padding:8px;font-weight:bold;cursor:pointer;font-family:sans-serif">
+  <span style="background:#facc15;color:black;padding:2px 6px;border-radius:4px;font-size:10px">ANUNCIO</span>
+  <span id="banner-texto">✨ Anúnciate aquí ✨</span>
+</div>
+<script>
+let banners = [];
+let idx = 0;
+fetch('/data/banners.json').then(r=>r.json()).then(d=>{ banners=d.filter(b=>b.activo); if(banners.length>0) mostrar(); }).catch(()=>{
+  banners=[{texto:"Anúnciate aquí", negocio:"Tu negocio aquí - $100 al mes", whatsapp:"4491883244", activo:true}];
+  mostrar();
+});
+function mostrar(){
+  const b=banners[idx];
+  document.getElementById('banner-texto').innerHTML = `✨ ${b.texto} - ${b.negocio} ✨`;
+  document.getElementById('banner-anuncios').onclick = ()=>{
+    window.open(`https://wa.me/52${b.whatsapp}?text=Hola vi tu anuncio de ${b.negocio} en Bazar Los Cuates`,'_blank');
+  };
+}
+setInterval(()=>{
+  if(banners.length<=1) return;
+  idx=(idx+1)%banners.length;
+  mostrar();
+},3000);
+</script>
+<!-- BANNER ANUNCIATE AQUI - FIN -->
+\n<!-- BANNER -->
 <div id="banner-inteligente" style="width:100%;background:#f5f5f5;"><div id="banner-container" style="width:100%;"></div></div>
 <script>async function cargarBanners(){try{const r=await fetch('/public/data/banners.json');const b=await r.json();const c=document.getElementById('banner-container');if(!b.length){c.innerHTML='<div style="padding:20px;text-align:center;background:linear-gradient(90deg,#ff8a00,#e52e71);color:white;font-weight:bold;">📢 ANUNCIATE AQUI - Bazar Los Cuates - Constitucion 216 - WhatsApp 4491883244</div>';return;}c.innerHTML=b.map(x=>`<a href="${x.link||'#'}"><img src="${x.imagen}" style="width:100%;max-height:280px;object-fit:cover;width:100%"></a>`).join('');}catch(e){document.getElementById('banner-container').innerHTML='<div style="padding:20px;text-align:center;background:#000;color:#fff;">📢 ANUNCIATE AQUI 4491883244</div>';}}cargarBanners();</script>
   <a class="skip-link" href="#catalogo">Ir directo al catálogo</a>
