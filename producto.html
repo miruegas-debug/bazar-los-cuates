@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producto | Bazar Los Cuates - Jesús María</title>
+  <meta name="description" content="Consulta la pieza, revisa su condición y contáctame directo por WhatsApp. Entrega en Av. Constitución 216, Jesús María.">
+  <meta name="theme-color" content="#080808">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Bazar Los Cuates, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">BLC</span>
+        <span class="brand-copy">
+          <strong>Bazar Los Cuates</strong>
+          <small>Jesús María, Aguascalientes</small>
+        </span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+        <a href="index.html#catalogo">Catálogo</a>
+        <a href="index.html#como-funciona">Cómo funciona</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a class="btn btn-primary nav-wa" href="index.html#catalogo">Ver piezas</a>
+      </nav>
+      <a class="btn btn-primary header-wa" href="index.html#catalogo">Ver piezas</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="product-page section">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Ruta de navegación">
+          <a href="index.html">Inicio</a>
+          <span>/</span>
+          <a href="index.html#catalogo">Catálogo</a>
+          <span>/</span>
+          <span id="breadcrumb-current">Producto</span>
+        </nav>
+
+        <div class="portal-loading" id="product-loading">
+          <span class="spinner" aria-hidden="true"></span>
+          Cargando pieza...
+        </div>
+
+        <div class="empty-state" id="product-error" hidden>
+          <span class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8.5 11h5"/></svg>
+          </span>
+          <h3>No encontramos esta pieza</h3>
+          <p id="product-error-text">Puede que ya se haya vendido o que la publicación esté pausada.</p>
+          <a class="btn btn-primary" href="index.html#catalogo">Volver al catálogo</a>
+        </div>
+
+        <div class="product-detail-grid" id="product-app" hidden>
+          <div class="detail-media">
+            <img id="detail-image" src="" alt="">
+            <span class="product-category" id="detail-category"></span>
+            <span class="product-condition" id="detail-condition"></span>
+            <span class="product-anonymous">Bazar Los Cuates</span>
+          </div>
+
+          <div class="detail-content">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> Bazar personal</p>
+            <h1 id="detail-title"></h1>
+            <div class="detail-meta-row">
+              <span id="detail-location"></span>
+              <span>Disponible</span>
+            </div>
+            <div class="detail-price">
+              <small>Precio</small>
+              <strong id="detail-price"></strong>
+            </div>
+            <div class="detail-share">
+              <button class="btn btn-wa" type="button" id="detail-whatsapp">Contactar por WhatsApp</button>
+              <button class="btn btn-outline" type="button" id="detail-share-fb">Compartir en Facebook</button>
+              <button class="btn btn-outline" type="button" id="detail-share-groups">Compartir en Grupos</button>
+            </div>
+            <div class="anonymous-notice">
+              <span class="detail-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+              </span>
+              <p><strong>Atención directa.</strong> Soy yo quien atiende el bazar. Si te gusta la pieza, mándame WhatsApp y te confirmo disponibilidad al momento.</p>
+            </div>
+            <div class="detail-description">
+              <h2>Descripción</h2>
+              <p id="detail-description"></p>
+            </div>
+            <div class="detail-rules">
+              <p><strong>Contacto directo.</strong> Sin formularios ni comisiones: me escribes por WhatsApp y acordamos la entrega.</p>
+              <p><strong>Entrega en el bazar.</strong> Av. Constitución 216, Jesús María. Pago en efectivo al recibir.</p>
+            </div>
+            <button class="btn btn-wa btn-block detail-bottom-wa" type="button" id="detail-bottom-whatsapp">Contactar por WhatsApp</button>
+          </div>
+
+          <aside class="offer-box contact-box">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> Contacto directo</p>
+            <h2>¿Te gusta?</h2>
+            <p class="offer-box-note">Mándame WhatsApp con el nombre de la pieza y te respondo personalmente.</p>
+            <div class="contact-price">
+              <small>Precio publicado</small>
+              <strong id="detail-price-side"></strong>
+            </div>
+            <button class="btn btn-wa btn-block" type="button" id="detail-whatsapp-side">Escribir por WhatsApp</button>
+            <a class="btn btn-outline btn-block contact-call" href="tel:+524491883244">Llamar al 449 188 3244</a>
+            <address class="contact-address">Av. Constitución 216<br>CP 20922, Jesús María, Ags.<br>Pago en efectivo</address>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom footer-bottom-single">
+      <p>© <span id="year"></span> Bazar Los Cuates - Jesús María. Av. Constitución 216, CP 20922.</p>
+      <p><a href="index.html#catalogo">Volver al catálogo</a> · <a href="index.html#contacto">Contacto y mapa</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+  <script src="product.js" defer></script>
+</body>
+</html>
