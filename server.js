@@ -64,6 +64,11 @@ const STATIC_FILES = new Map([
   ["/seller.js", "seller.js"],
   ["/offer.js", "offer.js"],
   ["/admin.js", "admin.js"],
+  ["/pwa.js", "pwa.js"],
+  ["/manifest.json", "public/manifest.json"],
+  ["/sw.js", "public/sw.js"],
+  ["/icon-192.png", "public/icon-192.png"],
+  ["/icon-512.png", "public/icon-512.png"],
 ]);
 
 const MIME_TYPES = {
@@ -77,6 +82,7 @@ const MIME_TYPES = {
   ".webp": "image/webp",
   ".ico": "image/x-icon",
   ".txt": "text/plain; charset=utf-8",
+  ".json": "application/manifest+json; charset=utf-8",
 };
 
 const rateBuckets = new Map();

@@ -5,16 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bazar Los Cuates - Jesús María, Aguascalientes</title>
   <meta name="description" content="Bazar personal en Av. Constitución 216, Jesús María. Mira herramienta, muebles, bocinas, cuchillos y electrodomésticos y contáctame directo por WhatsApp.">
-  <meta name="theme-color" content="#080808">
+  <meta name="theme-color" content="#FFD700">
   <meta property="og:title" content="Bazar Los Cuates - Jesús María, Aguascalientes">
   <meta property="og:description" content="Piezas de segunda mano con contacto directo por WhatsApp. Entrega en Av. Constitución 216, Jesús María. Pago en efectivo o transferencia.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/hero-taller.jpg">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261023-3">
+  <link rel="stylesheet" href="styles.css?v=20261023-4">
 </head>
 <body>
   <a class="skip-link" href="#catalogo">Ir directo al catálogo</a>
@@ -289,7 +292,19 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261023-3" defer></script>
-  <script src="script.js?v=20261023-3" defer></script>
+
+  <div class="blc-exit-modal" id="blc-exit-modal" role="dialog" aria-modal="true" aria-labelledby="blc-exit-title" hidden>
+    <div class="blc-exit-card">
+      <div class="blc-exit-logo" aria-hidden="true">BLC</div>
+      <h2 id="blc-exit-title">¡Espera, cuate!</h2>
+      <p>¿Quieres estar al pendiente de todo lo nuevo del <strong>Bazar Los Cuates</strong>?<br><br>Instala la <strong>App BLC</strong>, es gratis y te avisa primero en Jesús María.</p>
+      <button class="btn btn-primary blc-exit-install" type="button" data-pwa-install>Sí, instalar App BLC</button>
+      <button class="blc-exit-close" type="button" data-pwa-close>No, gracias, seguir viendo</button>
+    </div>
+  </div>
+
+  <script src="app.js?v=20261023-4" defer></script>
+  <script src="script.js?v=20261023-4" defer></script>
+  <script src="pwa.js?v=20261023-4" defer></script>
 </body>
 </html>
