@@ -37,6 +37,9 @@ const {
 
 const SESSION_COOKIE = "bc_session";
 const SESSION_DAYS = 7;
+const VISITOR_COOKIE = "bc_visitor";
+const VISITOR_DAYS = 365;
+const PUBLIC_VISIT_PAGES = new Set(["/", "/index.html", "/producto.html"]);
 const MAX_JSON_BYTES = 8 * 1024 * 1024;
 const ROOT = __dirname;
 const DEEPSEEK_API_KEY = String(process.env.DEEPSEEK_API_KEY || "").trim();
@@ -118,10 +121,14 @@ function createApp(options = {}) {
 
       const sharePageMatch = pathname.match(/^\/p\/([A-Za-z0-9_-]+)\/?$/);
       if (sharePageMatch) {
+        trackPageVisit(req, res, "/p/:id", context);
         serveProductSharePage(req, res, sharePageMatch[1], context);
         return;
       }
 
+      if (PUBLIC_VISIT_PAGES.has(pathname)) {
+        trackPageVisit(req, res, pathname, context);
+      }
       serveStatic(req, res, pathname, context);
     } catch (error) {
       handleError(res, error);
@@ -259,6 +266,32 @@ function sessionCookie(req, token, maxAgeSeconds) {
   const secure = process.env.COOKIE_SECURE === "true" || req.headers["x-forwarded-proto"] === "https";
   const expires = maxAgeSeconds > 0 ? `Max-Age=${maxAgeSeconds}; ` : "Max-Age=0; ";
   return `${SESSION_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; ${expires}${secure ? "Secure; " : ""}`.trim();
+}
+
+function visitorCookie(req, token, maxAgeSeconds) {
+  const secure = process.env.COOKIE_SECURE === "true" || req.headers["x-forwarded-proto"] === "https";
+  return `${VISITOR_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSeconds};${secure ? " Secure;" : ""}`;
+}
+
+function trackPageVisit(req, res, pathname, context) {
+  if (req.method !== "GET") return;
+
+  const userAgent = String(req.headers["user-agent"] || "").toLowerCase();
+  if (!userAgent || /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegram|curl|wget|python-requests|headless/.test(userAgent)) {
+    return;
+  }
+
+  const cookies = parseCookies(req);
+  let token = cookies[VISITOR_COOKIE];
+  if (!token || !/^[A-Za-z0-9_-]{16,64}$/.test(token)) {
+    token = randomToken(18);
+    res.setHeader("Set-Cookie", visitorCookie(req, token, VISITOR_DAYS * 24 * 60 * 60));
+  }
+
+  const day = mexicoDayKey(new Date());
+  context.db.prepare(
+    "INSERT OR IGNORE INTO visitor_days (visitor_hash, day, path, created_at) VALUES (?, ?, ?, ?)",
+  ).run(sha256(token), day, pathname, nowIso());
 }
 
 function createSession(req, res, userId, db) {
@@ -663,6 +696,12 @@ async function handleApi(req, res, requestUrl, context) {
     const todayKey = mexicoDayKey(new Date());
     const todayProductCount = db.prepare("SELECT created_at FROM products WHERE status = 'active'").all()
       .filter((row) => mexicoDayKey(row.created_at) === todayKey).length;
+    const visitsToday = Number(db.prepare(
+      "SELECT COUNT(*) AS total FROM visitor_days WHERE day = ?",
+    ).get(todayKey).total);
+    const visitsTotal = Number(db.prepare(
+      "SELECT COUNT(DISTINCT visitor_hash) AS total FROM visitor_days",
+    ).get().total);
 
     sendJson(res, 200, {
       commissionRate: COMMISSION_RATE,
@@ -676,6 +715,8 @@ async function handleApi(req, res, requestUrl, context) {
       nearbyCities: NEARBY_CITIES,
       productCount: Number(productCount.total),
       todayProductCount,
+      visitsToday,
+      visitsTotal,
       aiEnabled: Boolean(DEEPSEEK_API_KEY),
     });
     return;
@@ -1156,12 +1197,21 @@ async function handleApi(req, res, requestUrl, context) {
     const countByStatus = (status) => Number(db.prepare(
       "SELECT COUNT(*) AS total FROM products WHERE status = ?",
     ).get(status).total);
+    const todayKey = mexicoDayKey(new Date());
+    const visitsToday = Number(db.prepare(
+      "SELECT COUNT(*) AS total FROM visitor_days WHERE day = ?",
+    ).get(todayKey).total);
+    const visitsTotal = Number(db.prepare(
+      "SELECT COUNT(DISTINCT visitor_hash) AS total FROM visitor_days",
+    ).get().total);
     sendJson(res, 200, {
       summary: {
         totalProducts: countByStatus("active") + countByStatus("paused") + countByStatus("sold"),
         activeProducts: countByStatus("active"),
         pausedProducts: countByStatus("paused"),
         soldProducts: countByStatus("sold"),
+        visitsToday,
+        visitsTotal,
       },
     });
     return;

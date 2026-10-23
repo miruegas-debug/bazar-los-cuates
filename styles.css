@@ -4237,6 +4237,43 @@ body.modal-open {
   border-color: var(--muted);
 }
 
+.visitor-counters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.visitor-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.visitor-counter svg {
+  width: 16px;
+  height: 16px;
+  color: var(--yellow);
+}
+
+.visitor-counter strong {
+  color: var(--yellow);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.admin-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .hero-stats dt.hero-payment-stat {
   max-width: 150px;
   font-size: 1.12rem;

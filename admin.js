@@ -131,6 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
       summaryCard("Pausados", summary.pausedProducts, "Fuera de la tienda"),
       summaryCard("Vendidos", summary.soldProducts, "Guardados en historial"),
       summaryCard("Total", summary.totalProducts, "Publicaciones creadas"),
+      summaryCard("Personas hoy", summary.visitsToday ?? 0, "Visitantes únicos"),
+      summaryCard("Personas total", summary.visitsTotal ?? 0, "Visitantes únicos"),
     ].join("");
   }
 

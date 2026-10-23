@@ -66,6 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const todayCounter = document.querySelector("#contador-hoy");
     if (totalCounter) totalCounter.textContent = meta.productCount;
     if (todayCounter) todayCounter.textContent = meta.todayProductCount ?? 0;
+
+    const visitsToday = document.querySelector("#contador-visitas-hoy");
+    const visitsTotal = document.querySelector("#contador-visitas-total");
+    if (visitsToday) visitsToday.textContent = meta.visitsToday ?? 0;
+    if (visitsTotal) visitsTotal.textContent = meta.visitsTotal ?? 0;
   }
 
   function updateCategoryButtons() {
