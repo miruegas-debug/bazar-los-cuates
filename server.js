@@ -1169,6 +1169,36 @@ async function handleApi(req, res, requestUrl, context) {
     return;
   }
 
+  if ((pathname === "/api/admin/products" || pathname === "/api/productos/todos") && method === "DELETE") {
+    requireUser(req, db, "admin");
+    const totalProducts = Number(db.prepare("SELECT COUNT(*) AS total FROM products").get().total);
+    db.exec("BEGIN");
+    try {
+      db.prepare("DELETE FROM offer_events").run();
+      db.prepare("DELETE FROM offers").run();
+      db.prepare("DELETE FROM sales").run();
+      db.prepare("DELETE FROM products").run();
+      db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      throw error;
+    }
+
+    let deletedImages = 0;
+    for (const entry of fs.readdirSync(uploadsDir, { withFileTypes: true })) {
+      if (!entry.isFile()) continue;
+      fs.rmSync(path.join(uploadsDir, entry.name), { force: true });
+      deletedImages += 1;
+    }
+    sendJson(res, 200, {
+      ok: true,
+      deletedProducts: totalProducts,
+      deletedImages,
+      mensaje: "Catálogo borrado.",
+    });
+    return;
+  }
+
   if (pathname === "/api/admin/products" && method === "GET") {
     requireUser(req, db, "admin");
     const status = String(requestUrl.searchParams.get("status") || "").trim();

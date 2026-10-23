@@ -4141,3 +4141,19 @@ body.modal-open {
 .image-drop-compact {
   min-height: 150px;
 }
+
+.admin-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.admin-delete-all-button {
+  color: #ff8a8a;
+  border-color: rgba(255, 90, 90, 0.4);
+}
+.admin-delete-all-button:hover {
+  color: #fff;
+  background: #a32121;
+  border-color: #a32121;
+}

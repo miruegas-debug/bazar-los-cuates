@@ -254,6 +254,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const deleteAllButton = event.target.closest("[data-admin-delete-all]");
+    if (deleteAllButton) {
+      removeAllProducts(deleteAllButton);
+      return;
+    }
+
     const shareButton = event.target.closest("[data-admin-share]");
     if (shareButton) {
       const product = adminProducts.find((item) => item.publicId === shareButton.dataset.adminShare);
@@ -291,6 +297,22 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       await BC.api(`/api/admin/products/${button.dataset.adminDelete}`, { method: "DELETE" });
       BC.toast("Publicación eliminada.");
+      await loadDashboard();
+    } catch (error) {
+      BC.toast(error.message, "error");
+      button.disabled = false;
+    }
+  }
+
+  async function removeAllProducts(button) {
+    if (!window.confirm("Esto borrará TODOS los productos y sus fotos. ¿Continuar?")) return;
+    const confirmation = window.prompt('Escribe BORRAR para confirmar');
+    if (confirmation !== "BORRAR") return;
+    button.disabled = true;
+    try {
+      const result = await BC.api("/api/admin/products", { method: "DELETE" });
+      BC.toast(`Catálogo borrado: ${result.deletedProducts} productos y ${result.deletedImages} fotos.`);
+      switchTab("products");
       await loadDashboard();
     } catch (error) {
       BC.toast(error.message, "error");
