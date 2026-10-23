@@ -184,7 +184,7 @@ const BC = (() => {
     const alert = document.createElement("div");
     alert.className = "site-alert";
     alert.setAttribute("role", "note");
-    alert.textContent = "⚠️ Entrega en Bazar Los Cuates, Av. Constitución 216, Jesús María. Pago en efectivo.";
+    alert.textContent = "⚠️ Entrega en Bazar Los Cuates, Av. Constitución 216, Jesús María. Pago en efectivo o transferencia.";
     document.body.prepend(alert);
 
     const updateHeight = () => {
@@ -552,7 +552,7 @@ const BC = (() => {
   }
 
   function shareCaption(product) {
-    return `${shareText(product)}\n${productShareUrl(product.publicId)}\n${ADDRESS}\nPago en efectivo.`;
+    return `${shareText(product)}\n${productShareUrl(product.publicId)}\n${ADDRESS}\nPago en efectivo o transferencia.`;
   }
 
   function renderShareModal() {

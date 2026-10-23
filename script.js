@@ -62,7 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
       </button>
     `).join("");
 
-    document.querySelector("#hero-product-count").textContent = meta.productCount;
+    const totalCounter = document.querySelector("#contador-total");
+    const todayCounter = document.querySelector("#contador-hoy");
+    if (totalCounter) totalCounter.textContent = meta.productCount;
+    if (todayCounter) todayCounter.textContent = meta.todayProductCount ?? 0;
   }
 
   function updateCategoryButtons() {

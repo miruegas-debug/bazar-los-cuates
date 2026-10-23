@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         : `
           <strong>Trato cerrado por ${BC.money(offer.currentCents)}</strong>
           <p>Trato cerrado. Ven a Av. Constitución 216 a pagar tu comisión para recibir datos de entrega.</p>
-          <p class="commission-amount">Comisión del 10%: <b>${BC.money(offer.commission?.commissionCents || Math.round(offer.currentCents * 0.1))}</b> · Pago en efectivo</p>
+          <p class="commission-amount">Comisión del 10%: <b>${BC.money(offer.commission?.commissionCents || Math.round(offer.currentCents * 0.1))}</b> · Pago en efectivo o transferencia</p>
         `;
       return;
     }

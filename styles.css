@@ -4236,3 +4236,9 @@ body.modal-open {
   color: var(--cream);
   border-color: var(--muted);
 }
+
+.hero-stats dt.hero-payment-stat {
+  max-width: 150px;
+  font-size: 1.12rem;
+  line-height: 1.15;
+}

@@ -2,6 +2,19 @@ const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const crypto = require("node:crypto");
+
+const MEXICO_DAY_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Mexico_City",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+function mexicoDayKey(value) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return MEXICO_DAY_FORMATTER.format(date);
+}
 const { URL } = require("node:url");
 const { createDatabase, nowIso } = require("./lib/db");
 const { COMMISSION_RATE, CATEGORIES, CONDITIONS, SERVICE_STATES, NEARBY_CITIES } = require("./lib/constants");
@@ -647,6 +660,9 @@ async function handleApi(req, res, requestUrl, context) {
     ).all();
     const categoryCounts = Object.fromEntries(categoryRows.map((row) => [row.category, Number(row.total)]));
     const productCount = db.prepare("SELECT COUNT(*) AS total FROM products WHERE status = 'active'").get();
+    const todayKey = mexicoDayKey(new Date());
+    const todayProductCount = db.prepare("SELECT created_at FROM products WHERE status = 'active'").all()
+      .filter((row) => mexicoDayKey(row.created_at) === todayKey).length;
 
     sendJson(res, 200, {
       commissionRate: COMMISSION_RATE,
@@ -659,6 +675,7 @@ async function handleApi(req, res, requestUrl, context) {
       states: SERVICE_STATES,
       nearbyCities: NEARBY_CITIES,
       productCount: Number(productCount.total),
+      todayProductCount,
       aiEnabled: Boolean(DEEPSEEK_API_KEY),
     });
     return;
