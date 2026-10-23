@@ -331,55 +331,5 @@ const bannersReal=["ANUNCIATE AQUI - Tu negocio aqui $100 al mes","Carpinteria L
   <script src="app.js?v=20261023-5" defer></script>
   <script src="script.js?v=20261023-5" defer></script>
   <script src="pwa.js?v=20261023-5" defer></script>
-
-<script>
-// FUNCION NUEVA: muestra producto con N fotos primero y video al final
-function renderProductoCarrusel(p){
-  let fotos = p.fotos || (p.imagen ? [p.imagen] : []);
-  let video = p.video || null;
-  let id = p._id || p.id || Math.random().toString(36).slice(2);
-  let html = `<div style="position:relative;width:100%;overflow:hidden;border-radius:12px;background:#fff">
-    <div id="carr-${id}" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch">
-  `;
-  fotos.forEach((f,i)=>{
-    html+=`<img src="${f}" style="min-width:100%;height:280px;object-fit:cover;scroll-snap-align:start" loading="lazy">`;
-  });
-  if(video){
-    html+=`<video src="${video}" controls style="min-width:100%;height:280px;object-fit:cover;scroll-snap-align:start;background:#000"></video>`;
-  }
-  html+=`</div>`;
-  // puntitos
-  if(fotos.length+ (video?1:0) > 1){
-    html+=`<div style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:5px">`;
-    fotos.forEach((_,i)=>{ html+=`<span style="width:8px;height:8px;border-radius:50%;background:#fff;border:1px solid #000;display:inline-block"></span>`; });
-    if(video) html+=`<span style="width:8px;height:8px;border-radius:50%;background:red;border:1px solid #fff;display:inline-block"></span>`;
-    html+=`</div>`;
-  }
-  html+=`</div><div style="padding:8px"><b>${p.nombre||''}</b><br>$${p.precio||''}</div>`;
-  return html;
-}
-// Reemplaza la funcion vieja que solo mostraba 1 foto
-window.mostrarProductos = async function(){
-  try{
-    let r=await fetch('/api/productos');
-    let prods=await r.json();
-    let cont=document.getElementById('productos') || document.querySelector('[id*=producto]') || document.body;
-    // busca donde van productos
-    let target=document.getElementById('lista-productos') || document.getElementById('productos') || document.querySelector('.productos');
-    if(!target){
-      console.log('No encontre contenedor, creando uno');
-      return;
-    }
-    let h='';
-    prods.forEach(p=>{ h+= `<div style="margin:10px;border:1px solid #ddd;border-radius:12px;overflow:hidden;background:#fff">${renderProductoCarrusel(p)}</div>`; });
-    target.innerHTML=h;
-  }catch(e){ console.log('Error cargando',e); }
-}
-// Auto-ejecuta cada 3 seg por si tu pagina carga distinto
-setInterval(()=>{ if(document.getElementById('lista-productos')||document.getElementById('productos')) mostrarProductos(); },3000);
-document.addEventListener('DOMContentLoaded', mostrarProductos);
-mostrarProductos();
-console.log('Pagina del ARMY actualizada a N fotos + video');
-</script>
 </body>
 </html>
